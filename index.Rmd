@@ -1,0 +1,183 @@
+---
+title: "Sarah Johaningsmeir's CV"
+author: Sarah Johaningsmeir
+date: "`r Sys.Date()`"
+output:
+  pagedown::html_resume:
+    css: ['css/styles.css', 'resume']
+    # set it to true for a self-contained HTML page but it'll take longer to render
+    self_contained: true
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  results='asis', 
+  echo = FALSE
+)
+
+library(glue)
+library(tidyverse)
+
+# Set this to true to have links turned into footnotes at the end of the document
+PDF_EXPORT <- FALSE
+
+# Holds all the links that were inserted for placement at the end
+links <- c()
+
+source('parsing_functions.R')
+
+# Load csv with position info
+position_data <- read_csv('positions.csv')
+```
+
+
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("
+  <style>
+  :root{
+    --decorator-outer-offset-left: -6.5px;
+  }
+  </style>")
+}
+```
+
+
+Aside
+================================================================================
+
+
+![logo](beta_dist.png){width=100%}
+
+```{r}
+# When in export mode the little dots are unaligned, so fix that. 
+if(PDF_EXPORT){
+  cat("View this CV online with links at _/johaning.github.io/cv/_")
+} else {
+  cat("[<i class='fas fa-download'></i> Download a PDF of this CV](https://johaning.github.io/cv/)")
+}
+```
+
+Contact {#contact}
+--------------------------------------------------------------------------------
+
+
+- <i class="fa fa-envelope"></i> johaning@gmail.com
+- <i class="fa fa-github"></i> github.com/johaning
+- <i class="fa fa-phone"></i> 414-248-1122
+
+
+
+
+Disclaimer {#disclaimer}
+--------------------------------------------------------------------------------
+
+Made with the R package [**pagedown**](https://github.com/rstudio/pagedown). 
+
+The source code is available at [github.com/nstrayer/cv](https://github.com/nstrayer/cv).
+
+Last updated on `r Sys.Date()`.
+
+
+
+
+Main
+================================================================================
+
+Sarah Johaningsmeir {#title}
+--------------------------------------------------------------------------------
+
+
+```{r}
+intro_text <- "I coordinated >$6 million subcontract for Wisconsin Department of Health Services' CMS Health Care Innovation Award, collaborated with statewide stakeholders for quality improvement to improve care and quality of life for children with medical complexity and their families, and developed data collection, analysis, and reporting systems that resulted in multi-million dollar annual funding for the Complex Care Program.
+
+Currently seeking a position that allows me to apply my program development, evaluation, and data analysis in the health, education, or other public service arena.
+"
+
+cat(sanitize_links(intro_text))
+```
+
+
+
+Education {data-icon=graduation-cap data-concise=true}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'education')
+```
+
+
+
+Experience {data-icon=building}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'positions')
+```
+
+
+
+<br>
+<br>
+<br>
+
+
+
+
+
+
+Peer Reviewed Publications {data-icon=book-open}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'academic_articles')
+```
+
+
+
+Invited Publications {data-icon=book-open}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'invited_articles')
+```
+
+
+
+
+Selected Posters, Abstracts, and Talks {data-icon=columns}
+--------------------------------------------------------------------------------
+
+```{r}
+print_section(position_data, 'posters_talks')
+```
+
+
+
+
+
+
+
+
+
+
+```{r}
+if(PDF_EXPORT){
+  cat("
+  
+Links {data-icon=link}
+--------------------------------------------------------------------------------
+
+<br>
+
+
+")
+  
+  walk2(links, 1:length(links), function(link, index){
+    print(glue('{index}. {link}'))
+  })
+}
+```
+
+
